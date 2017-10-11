@@ -49,20 +49,17 @@
 	</insert>
 
 	<update id="book.updateLocation" parameterType="hashMap">
-		update books
-		set location = #{location}
+		update books set location = #{location}
 		where book_no = #{bookNo}
 	</update>
 
 	<update id="book.updateCondition" parameterType="hashMap">
-		update books
-		set condition = #{condition}
+		update books set condition = #{condition}
 		where book_no = #{bookNo}
 	</update>
 	
 	<delete id="book.delete" parameterType="String">
-		delete
-		from customers
+		delete from customers
 		where book_no = #{bookNo}
 	</delete>
 

@@ -210,12 +210,11 @@ public class Service {
 					System.out.println("대출하신 책을 반납하여주세요.");
 					return false;
 				}
-				
-				if(memberDao.deleteUser(id)!=0) {
-					return true;
-				} else {
-					return false;
-				}
+			}
+			if(memberDao.deleteUser(id)!=0) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 		return false;
@@ -270,7 +269,12 @@ public class Service {
 	 * @return 삭제 성공시 true, 실패시 false 반환
 	 */
 	public boolean deleteBook(String bookNo) {
-		int delete = bookDao.deleteBook(bookNo);
+		int delete = 0;
+		if(lendDao.selectBook(bookNo) == null) {
+			delete = bookDao.delete(bookNo);
+		} else {
+			delete = bookDao.deleteBook(bookNo);
+		}
 		if(delete != 0) {
 			return true;
 		}
@@ -304,8 +308,10 @@ public class Service {
 	public boolean insertLending(LendReturn lending) {
 		if(memberDao.isCondition(lending.getMemberId())) {
 			if(memberDao.updateLending(lending.getMemberId()) != 0) {
-				lendDao.insertLend(lending);
-				return true;
+				if(bookDao.updateCondition(lending.getBookNo(), "대출중") != 0) {
+					lendDao.insertLend(lending);
+					return true;
+				}
 			} else { return false; }
 		}
 		return false;
@@ -321,10 +327,11 @@ public class Service {
 		if(lendDao.updateReturn(id, lendCode) != 0) {
 			memberDao.updateReturn(id);
 			if(lendDao.isoverdue(lendCode)) {
-				if(memberDao.updateCondition(id)!=0)
+				if(memberDao.updateCondition(id)!=0) {
 					System.out.println("연체기간만큼 대출불가 상태가 됩니다.");
-				else
-					System.out.println("대출불가 설정에 실패했습니다.");
+				} else {
+						System.out.println("대출불가 설정에 실패했습니다.");
+				}
 			}
 			return true;
 		}

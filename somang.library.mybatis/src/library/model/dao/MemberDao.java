@@ -237,6 +237,11 @@ public class MemberDao {
 		return count;
 	}
 	
+	/**
+	 * 회원탈퇴시 대출기록이 있는 사용자의 정보삭제
+	 * @param memberId 회원 아이디
+	 * @return 정보삭제 성공 행수, 실패시 0
+	 */
 	public int deleteUser(String memberId) {
 		SqlSession session = factory.getSqlSession(true);
 		int count = 0;

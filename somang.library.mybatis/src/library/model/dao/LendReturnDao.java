@@ -182,4 +182,19 @@ public class LendReturnDao {
 		return count;
 	}
 	
+	/**
+	 * 도서번호에 대한 대출기록 조회
+	 * @param bookNo 도서번호
+	 * @return 대출기록 리스트
+	 */
+	public List<LendReturn> selectBook(String bookNo) {
+		SqlSession session = factory.getSqlSession();
+		List<LendReturn> list = null;
+		try {
+			list = session.selectList("lendReturn.selectBook", bookNo);
+		} finally {
+			session.close();
+		}
+		return list;
+	}
 }

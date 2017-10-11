@@ -114,11 +114,30 @@ public class BookDao {
 	 * @param bookNo 도서번호
 	 * @return 성공시 삭제 성공 행수, 실패시 0
 	 */
-	public int deleteBook(String bookNo) {
+	public int delete(String bookNo) {
 		SqlSession session = factory.getSqlSession(true);
 		int count = 0;
 		try { 
 			count = session.delete("book.delete", bookNo);
+		} finally {
+			session.close();
+		}
+		return count;
+	}
+	
+	/**
+	 * 대출이력이 남아있는 도서의 경우 삭제시 정보삭제
+	 * @param bookNo 도서번호
+	 * @return 성공시 삭제 성공행수, 실패시 0
+	 */
+	public int deleteBook(String bookNo) {
+		SqlSession session = factory.getSqlSession(true);
+		int count = 0;
+		HashMap<String, String> bookMap = new HashMap<>();
+		bookMap.put("bookNo", bookNo);
+		bookMap.put("condition", "삭제도서");
+		try {
+			count = session.update("book.updateCondition", bookMap);
 		} finally {
 			session.close();
 		}
