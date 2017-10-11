@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+				 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="book">
+	
+	<resultMap id="bookResult" type="book">
+		<result property="bookNo" column="book_no" />
+		<result property="bookTitle" column="book_title" />
+		<result property="author" column="author" />
+		<result property="publisher" column="publisher" />
+		<result property="publishingDate" column="publishing_date" />
+		<result property="isbn" column="ISBN" />
+		<result property="condition" column="condition" />
+		<result property="location" column="location" />
+		<result property="typeCode" column="type_code" />
+		<result property="category" column="category" />
+	</resultMap>
+
+	<select id="book.selectTitle" parameterType="book" resultMap="bookResult">
+		<bind name="pattern" value="'%'+_parameter.getBookTitle()+'%'"/>
+		select * from books
+		where book_title like #{pattern}
+	</select>
+	
+	<select id="book.selectAuthor" parameterType="book" resultMap="bookResult">
+		<bind name="pattern" value="'%'+_parameter.getAuthor()+'%'"/>
+		select * from books
+		where author like #{pattern}
+	</select>
+	
+	<select id="book.selectBooks" resultMap="bookResult">
+		select * from books order by book_no
+	</select>
+	
+	<insert id="book.insert" parameterType="book">
+		insert into books (book_no, book_title, author, publisher, publishing_date, ISBN, condition, location, type_code, category)
+		values (#{bookNo}, #{bookTitle}, #{author}, #{publisher}, #{publishing_date}, #{isbn}, #{condition}, #{location}, #{typeCode}, #{category})
+	</insert>
+
+	<update id="book.updateLocation" parameterType="hashMap">
+		update books
+		set location = #{location}
+		where book_no = #{bookNo}
+	</update>
+
+	<update id="book.updateCondition" parameterType="hashMap">
+		update books
+		set condition = #{condition}
+		where book_no = #{bookNo}
+	</update>
+	
+	<delete id="book.delete" parameterType="String">
+		delete
+		from customers
+		where book_no = #{bookNo}
+	</delete>
+
+</mapper>

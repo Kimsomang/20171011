@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+				 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="lendReturn">
+	
+	<resultMap id="lendReturnResult" type="lendReturn">
+		<result property="lendCode" column="lend_code" />
+		<result property="bookNo" column="book_no" />
+		<result property="bookTitle" column="book_title" />
+		<result property="memberId" column="member_id" />
+		<result property="lendDate" column="lend_date" />
+		<result property="returnDate" column="return_date" />
+		<result property="returnPeriod" column="return_period" />
+		<result property="extension" column="extension" />
+	</resultMap>
+
+	<select id="lendReturn.selectLend" parameterType="String" resultMap="lendReturnResult">
+		select * from lend_returns
+		where member_id = #{memberId}
+		order by lend_date
+	</select>
+	
+	<select id="lendReturn.select" resultMap="lendReturnResult">
+		select * from lend_returns order by lend_date
+	</select>
+	
+	<select id="lendReturn.isOver" parameterType="String" resultType="int">
+		select (return_period-return_date)
+		from lend_returns
+		where lend_code = #{lendCode}
+	</select>
+	
+	<select id="lendReturn.isExtension" parameterType="String" resultType="String">
+		select extension from lend_returns
+		where lend_code = #{lendCode}
+	</select>
+	
+	<insert id="lendReturn.insert" parameterType="lendReturn">
+		insert into lend_returns(lend_code, book_no, book_title, member_id, lend_date, return_period)
+		values(#{lendCode}, #{bookNo}, #{bookTitle}, #{memberId}, #{lendDate}, #{returnDate})
+	</insert>
+
+	<update id="lendReturn.updateReturn" parameterType="hashMap">
+		update lend_returns
+		set return_date = #{returnDate}
+		where lend_code = #{lendCode} and member_id = #{memberId}
+	</update>
+
+	<update id="lendReturn.updatePeriod" parameterType="hashMap">
+		update lend_returns
+		set return_period = (return_period+7), extension = #{extension}
+		where lend_code = #{lendCode}
+	</update>
+	
+	<delete id="lendReturn.delete" parameterType="String">
+		delete from lend_returns
+		where lend_code = #{lendCode}
+	</delete>
+
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="library.model.dto.Book" alias="book"/>
+		<typeAlias type="library.model.dto.Member" alias="member"/>
+		<typeAlias type="library.model.dto.LendReturn" alias="lendReturn"/>
+	</typeAliases>
+
+	<environments default="env">			
+		<environment id="env">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
+				<property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:XE" />
+				<property name="username" value="hr" />
+				<property name="password" value="tiger" />
+			</dataSource>
+		</environment>
+
+	</environments>
+
+	<mappers>
+		<mapper resource="conf/book-mapper.xml" />
+		<mapper resource="conf/member-mapper.xml" />
+		<mapper resource="conf/lendReturn-mapper.xml" />
+	</mappers>
+
+</configuration>
