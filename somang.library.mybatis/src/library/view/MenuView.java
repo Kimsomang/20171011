@@ -316,26 +316,13 @@ public class MenuView {
 	 */
 	public void selectBook() {
 		System.out.println("\n********************");
-		System.out.println(" 1. 도서명 검색");
-		System.out.println(" 2. 저자 검색");
-		System.out.println("\n********************");
-		System.out.print("검색 설정 선택 : ");
-		String select = scan.nextLine();
-		
-		if(select.equals("1")) {
-			System.out.println("\n********************");
-			System.out.print("검색하고자 하는 도서명을 입력하세요. : ");
-			String title = scan.nextLine();
-			controller.selectTitle(title);
-		} else if(select.equals("2")) {
-			System.out.println("\n********************");
-			System.out.print("검색하고자 하는 저자를 입력하세요. : ");
-			String author = scan.nextLine();
-			controller.selectAuthor(author);
-		} else {
-			System.out.println("잘못된 값을 입력하셨습니다."
-					+ "\n메뉴화면으로 돌아갑니다.");
-		}
+		System.out.println("1. 도서명   2. 저자명   3. 출판사   4. 출판일   5. 도서분류");
+		System.out.print("검색하고자 하는 항목을 입력하세요.(미입력시 전체조회, 다중선택가능) : ");
+		String category = scan.nextLine();
+		System.out.print("검색하고자 하는 키워드를 입력하세요. : ");
+		String keyword = scan.nextLine();
+			
+		controller.selectKeyword(keyword, category);
 	}
 	
 	/**

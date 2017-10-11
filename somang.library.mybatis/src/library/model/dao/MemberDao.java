@@ -38,13 +38,15 @@ public class MemberDao {
 	 * @param id 회원아이디
 	 * @return 존재하면 true, 존재하지 않으면 false 반환
 	 */
-	public boolean isMemberId(String id) {
+	public boolean isMemberId(String memberId) {
 		SqlSession session = factory.getSqlSession();
 		boolean isId = false;
+		String duplicate = null;
 		try {
-			String duplicate = session.selectOne("member.isId", id);
-			if(!duplicate.isEmpty())
+			duplicate = session.selectOne("member.isId", memberId);
+			if(duplicate != null) {
 				isId = true;
+			}
 		} finally {
 			session.close();
 		}
@@ -59,10 +61,12 @@ public class MemberDao {
 	public boolean isMobile(String mobile) {
 		SqlSession session = factory.getSqlSession();
 		boolean isTel = false;
+		String duplicate = null;
 		try {
-			String duplicate = session.selectOne("member.isMobile", mobile);
-			if(!duplicate.isEmpty())
+			duplicate = session.selectOne("member.isMobile", mobile);
+			if(duplicate != null) {
 				isTel = true;
+			}
 		} finally {
 			session.close();
 		}
@@ -74,11 +78,11 @@ public class MemberDao {
 	 * @param id 아이디
 	 * @return 비밀번호
 	 */
-	public String isLogin(String id) {
+	public String isLogin(String memberId) {
 		SqlSession session = factory.getSqlSession();
 		String password = null;
 		try {
-			password = session.selectOne("member.isLogin", id);
+			password = session.selectOne("member.isLogin", memberId);
 		} finally {
 			session.close();
 		}
@@ -111,10 +115,10 @@ public class MemberDao {
 	 * @param name 회원이름
 	 * @return 비밀번호
 	 */
-	public String selectPw(String id, String name, String mobile) {
+	public String selectPw(String memberId, String name, String mobile) {
 		SqlSession session = factory.getSqlSession();
 		HashMap<String, String> pwMap = new HashMap<>();
-		pwMap.put("memberId", id);
+		pwMap.put("memberId", memberId);
 		pwMap.put("name", name);
 		pwMap.put("mobile", mobile);
 		String password = null;
@@ -131,11 +135,11 @@ public class MemberDao {
 	 * @param id 회원 아이디
 	 * @return 회원 객체 정보
 	 */
-	public Member selectUser(String id) {
+	public Member selectUser(String memberId) {
 		SqlSession session = factory.getSqlSession();
 		Member dto = null;
 		try {
-			dto = session.selectOne("member.selectUser", id);
+			dto = session.selectOne("member.selectUser", memberId);
 		} finally {
 			session.close();
 		}
@@ -222,11 +226,22 @@ public class MemberDao {
 	 * @param id 아이디
 	 * @return 탈퇴 성공 행수, 실패시 0
 	 */
-	public int withdrawUser(String id) {
+	public int withdrawUser(String memberId) {
 		SqlSession session = factory.getSqlSession(true);
 		int count = 0;
 		try {
-			count = session.delete("member.delete", id);
+			count = session.delete("member.delete", memberId);
+		} finally {
+			session.close();
+		}
+		return count;
+	}
+	
+	public int deleteUser(String memberId) {
+		SqlSession session = factory.getSqlSession(true);
+		int count = 0;
+		try {
+			count = session.update("member.deleteUser", memberId);
 		} finally {
 			session.close();
 		}
@@ -238,11 +253,11 @@ public class MemberDao {
 	 * @param id 아이디
 	 * @return 대출가능이면 true, 대출불가면 false
 	 */
-	public boolean isCondition(String id) {
+	public boolean isCondition(String memberId) {
 		SqlSession session = factory.getSqlSession();
 		boolean isStatus = false;
 		try {
-			String condition = session.selectOne("member.isCondition", id);
+			String condition = session.selectOne("member.isCondition", memberId);
 			if(condition.equals("대출가능"))
 				isStatus=true;
 		} finally {
@@ -275,11 +290,11 @@ public class MemberDao {
 	 * @param id 아이디
 	 * @return 대출권수
 	 */
-	public int selectLend(String id) {
+	public int selectLend(String memberId) {
 		SqlSession session = factory.getSqlSession();
 		int lend = 0;
 		try {
-			String lending = session.selectOne("member.selectLend", id);
+			String lending = session.selectOne("member.selectLend", memberId);
 			lend = Integer.parseInt(lending.substring(0, 1));
 		} finally {
 			session.close();

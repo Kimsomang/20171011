@@ -19,20 +19,20 @@
 
 	<select id="member.selectId" parameterType="hashMap" resultType="String">
 		select member_id from member
-		where member_name = ${name} and mobile = ${mobile}
+		where member_name = #{name} and mobile = #{mobile}
 	</select>
 	
 	<select id="member.selectPw" parameterType="hashMap" resultType="String">
 		select member_pw from member
-		where member_id = ${memberId} and member_name = ${name} and mobile = ${mobile}
+		where member_id = #{memberId} and member_name = #{name} and mobile = #{mobile}
 	</select>
 	
 	<select id="member.selectLend" parameterType="String" resultType="String">
-		select lend_book from member where member_id = ${memberId}
+		select lend_book from member where member_id = #{memberId}
 	</select>
 	
 	<select id="member.selectUser" parameterType="String" resultMap="memberResult">
-		select * from member where member_id = ${memberId}
+		select * from member where member_id = #{memberId}
 	</select>
 	
 	<select id="member.selectUsers" resultMap="memberResult">
@@ -40,53 +40,60 @@
 	</select>
 	
 	<select id="member.isId" parameterType="String" resultType="String">
-		select mobile from member where member_id = ${memberId}
+		select mobile from member where member_id = #{memberId}
 	</select>
 	
 	<select id="member.isMobile" parameterType="String" resultType="String">
-		select member_id from member where mobile = ${mobile}
+		select member_id from member where mobile = #{mobile}
 	</select>
 	
 	<select id="member.isLogin" parameterType="String" resultType="String">
-		select member_pw from member where member_id = ${memberId}
+		select member_pw from member where member_id = #{memberId}
 	</select>
 	
 	<select id="member.isCondition" parameterType="String" resultType="String">
-		select condition from member where member_id = ${memberId}
+		select condition from member where member_id = #{memberId}
 	</select>
 	
 	<insert id="member.insert" parameterType="member">
 		insert into member(member_id, member_pw, member_name, birth, mobile, address)
-		values(${memberId}, ${password}, ${name}, ${birth}, ${mobile}, ${address})
+		values(#{memberId}, #{password}, #{name}, #{birth}, #{mobile}, #{address})
 	</insert>
 
 	<update id="member.updatePw" parameterType="hashMap">
-		update member set member_pw = ${password}
-		where member_id = ${memberId}
+		update member set member_pw = #{password}
+		where member_id = #{memberId}
 	</update>
 
 	<update id="member.updateMobile" parameterType="hashMap">
-		update member set mobile = ${mobile}
-		where member_id = ${memberId}
+		update member set mobile = #{mobile}
+		where member_id = #{memberId}
 	</update>
 	
 	<update id="member.updateAddress" parameterType="hashMap">
-		update member set address = ${address}
-		where member_id = ${memberId}
+		update member set address = #{address}
+		where member_id = #{memberId}
 	</update>
 	
 	<update id="member.updateCondition" parameterType="hashMap">
-		update member set condition = ${condition}
-		where member_id = ${memberId}
+		update member set condition = #{condition}
+		where member_id = #{memberId}
 	</update>
 	
 	<update id="member.updateLend" parameterType="hashMap">
-		update member set lend_book = ${lendBook}
-		where member_id = ${memberId}
+		update member set lend_book = #{lendBook}
+		where member_id = #{memberId}
+	</update>
+	
+	<update id="member.deleteUser" parameterType="String">
+		<![CDATA[
+			update member set member_pw='---', member_name='---', birth='---', mobile='---', address='---', lend_book='---', condition='delete'
+			where member_id = #{memberId}
+		]]>
 	</update>
 	
 	<delete id="member.delete" parameterType="String">
-		delete from member where member_id = ${memberId}
+		delete from member where member_id = #{memberId}
 	</delete>
 
 </mapper>

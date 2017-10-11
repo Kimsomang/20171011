@@ -1,5 +1,6 @@
 package library.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import library.model.dao.BookDao;
@@ -195,9 +196,27 @@ public class Service {
 	 * @return 성공시 true, 실패시 false 반환
 	 */
 	public boolean withdrawUser(String id) {
-		int withdraw = memberDao.withdrawUser(id);
-		if(withdraw != 0) {
-			return true;
+		if(memberDao.isMemberId(id)) {
+			List<LendReturn> list = lendDao.selectLending(id);
+			if(list==null) {
+				if(memberDao.withdrawUser(id)!=0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			for(int i = 0; i < list.size(); i++) {
+				if(list.get(i).getReturnDate() == null) {
+					System.out.println("대출하신 책을 반납하여주세요.");
+					return false;
+				}
+				
+				if(memberDao.deleteUser(id)!=0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
 		}
 		return false;
 	}
@@ -213,25 +232,15 @@ public class Service {
 		
 		return false;
 	}
-	
+
 	/**
-	 * 도서명 검색 요청을 위한 메소드
-	 * @param title 도서명
-	 * @return 도서 정보
+	 * 도서 통합검색을 위한 메소드
+	 * @param searchInfo
+	 * @return 검색한 리스트
 	 */
-	public List<Book> selectTitle(String title) {
-		 return bookDao.selectTitle(title);
+	public List<Book> selectKeyword(HashMap<String, String> searchInfo) {
+		return bookDao.selectKeyword(searchInfo);
 	}
-	
-	/**
-	 * 저자 검색 요청을 위한 메소드
-	 * @param author 저자
-	 * @return 도서 정보
-	 */
-	public List<Book> selectAuthor(String author) {
-		return bookDao.selectAuthor(author);
-	}
-	
 	/**
 	 * 도서 목록 조회 요청을 위한 메소드
 	 * @return 도서 정보 목록

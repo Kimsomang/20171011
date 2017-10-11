@@ -39,12 +39,12 @@
 	
 	<insert id="lendReturn.insert" parameterType="lendReturn">
 		insert into lend_returns(lend_code, book_no, book_title, member_id, lend_date, return_period)
-		values(#{lendCode}, #{bookNo}, #{bookTitle}, #{memberId}, #{lendDate}, #{returnDate})
+		values (#{lendCode}, #{bookNo}, #{bookTitle}, #{memberId}, #{lendDate, jdbcType=DATE}, #{returnPeriod, jdbcType=DATE})
 	</insert>
 
 	<update id="lendReturn.updateReturn" parameterType="hashMap">
 		update lend_returns
-		set return_date = #{returnDate}
+		set return_date = #{returnDate, jdbcType=DATE}
 		where lend_code = #{lendCode} and member_id = #{memberId}
 	</update>
 

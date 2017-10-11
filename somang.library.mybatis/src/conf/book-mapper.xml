@@ -17,17 +17,26 @@
 		<result property="typeCode" column="type_code" />
 		<result property="category" column="category" />
 	</resultMap>
-
-	<select id="book.selectTitle" parameterType="book" resultMap="bookResult">
-		<bind name="pattern" value="'%'+_parameter.getBookTitle()+'%'"/>
-		select * from books
-		where book_title like #{pattern}
-	</select>
 	
-	<select id="book.selectAuthor" parameterType="book" resultMap="bookResult">
-		<bind name="pattern" value="'%'+_parameter.getAuthor()+'%'"/>
+	<select id="book.selectKeyword" parameterType="hashMap" resultMap="bookResult">
 		select * from books
-		where author like #{pattern}
+		<where>
+			<if test="column1 != null">
+				${column1} like '%'||#{keyword}||'%'
+			</if>
+			<if test="column2 != null">
+				or ${column2} like '%'||#{keyword}||'%'
+			</if>
+			<if test="column3 != null">
+				or ${column3} like '%'||#{keyword}||'%'
+			</if>
+			<if test="column4 != null">
+				or ${column4} like '%'||#{keyword}||'%'
+			</if>
+			<if test="column5 != null">
+				or ${column5} like '%'||#{keyword}||'%'
+			</if>
+		</where>
 	</select>
 	
 	<select id="book.selectBooks" resultMap="bookResult">

@@ -1,6 +1,6 @@
 package library.test;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -36,13 +36,7 @@ public class Utility {
 	 * @return 지정된 형식에 맞추어 날짜 출력
 	 */
 	public Date today() {
-		GregorianCalendar calendar = new GregorianCalendar();
-		int year = calendar.get(Calendar.YEAR)-1900;
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DATE);
-		
-		Date date = new Date(year, month, day);
-		return date;
+		return new Date();
 	}
 	
 	/**
@@ -52,12 +46,6 @@ public class Utility {
 	public Date periodDate() {
 		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.add(Calendar.DATE, 10);
-		int year = calendar.get(Calendar.YEAR)-1900;
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DATE);
-		
-		Date date = new Date(year, month, day);
-		
-		return date;
+		return calendar.getTime();
 	}
 }

@@ -1,5 +1,6 @@
 package library.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import library.model.dto.Book;
@@ -28,10 +29,9 @@ public class Controller {
 		if(service.duplicateId(id)) {
 			System.out.println("이미 등록되어 있는 아이디입니다.");
 			return true;
-		} else {
-			System.out.println("사용 가능한 아이디입니다.");
-			return false;
 		}
+		System.out.println("사용 가능한 아이디입니다.");
+		return false;
 	}
 	
 	/**
@@ -47,9 +47,8 @@ public class Controller {
 		if(service.duplicateMobile(mobile)) {
 			System.out.println("이미 등록되어 있는 연락처입니다.");
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 	
 	/**
@@ -294,32 +293,18 @@ public class Controller {
 	}
 	
 	/**
-	 * 도서명 검색 메소드
-	 * @param title 도서명
+	 * 도서 통합검색 데이터 검증 메소드
+	 * @param keyword 검색키워드
+	 * @param category 검색항목
 	 */
-	public void selectTitle(String title) {
-		List<Book> book = service.selectTitle(title);
-		if(book != null) {
-			for(int i = 0; i < book.size(); i++) {
-			System.out.println(book.get(i));
-			}
-		} else {
+	public void selectKeyword(String keyword, String category) {
+		List<Book> book = service.selectKeyword(setSearchInfo(keyword, category));
+		if(book == null || book.isEmpty()) {
 			System.out.println("찾으시는 책이 없습니다.");
+			return;
 		}
-	}
-	
-	/**
-	 * 저자 검색 메소드
-	 * @param author 저자
-	 */
-	public void selectAuthor(String author) {
-		List<Book> book = service.selectAuthor(author);
-		if(book != null) {
-			for(int i = 0; i < book.size(); i++) {
-				System.out.println(book.get(i));
-			}
-		} else {
-			System.out.println("찾으시는 저자가 존재하지 않습니다.");
+		for(int i = 0; i < book.size(); i++) {
+			System.out.println(book.get(i));
 		}
 	}
 	
@@ -435,5 +420,34 @@ public class Controller {
 		} else {
 			return "대출 취소에 실패했습니다.";
 		}
+	}
+	
+	private HashMap<String, String> setSearchInfo(String keyword, String category) {
+		HashMap<String, String> searchInfo = new HashMap<>();
+		searchInfo.put("keyword", keyword);
+		if(category == null || category.trim().length() == 0) {
+			category = "12345";
+		}
+		char choice[] = category.toCharArray();
+		for(char check : choice) {
+			switch(check) {
+				case '1' :
+					searchInfo.put("column1", "book_title");
+					break;
+				case '2' :
+					searchInfo.put("column2", "author");
+					break;
+				case '3' :
+					searchInfo.put("column3", "publisher");
+					break;
+				case '4' :
+					searchInfo.put("column4", "publishing_date");
+					break;
+				case '5' :
+					searchInfo.put("column5", "type_code");
+					break;
+			}
+		}
+		return searchInfo;
 	}
 }

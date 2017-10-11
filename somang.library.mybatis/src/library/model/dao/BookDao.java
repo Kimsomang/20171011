@@ -3,6 +3,7 @@ package library.model.dao;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
 import library.model.dto.Book;
@@ -35,35 +36,18 @@ public class BookDao {
 		}
 		return count;
 	}
-	
+
 	/**
-	 * 도서명 검색 조회 메소드
-	 * @param title 도서명
-	 * @return 도서 정보
+	 * 도서 통합검색 메소드
+	 * @param searchInfo
+	 * @return 검색 리스트
 	 */
-	public List<Book> selectTitle(String title) {
+	public List<Book> selectKeyword(HashMap<String, String> searchInfo) {
 		SqlSession session = factory.getSqlSession();
 		List<Book> books = null;
-		Book book = new Book(title, null, null, null, null, null, null, null);
+		
 		try {
-			books = session.selectList("book.selectTitle", book);
-		} finally {
-			session.close();
-		}
-		return books;
-	}
-	
-	/**
-	 * 저자 검색 조회 메소드
-	 * @param author 저자
-	 * @return 도서 정보
-	 */
-	public List<Book> selectAuthor(String author) {
-		SqlSession session = factory.getSqlSession();
-		List<Book> books = null;
-		Book book = new Book(null, author, null, null, null, null, null, null);
-		try {
-			books = session.selectList("book.selectAuthor", book);
+			books = session.selectList("book.selectKeyword", searchInfo);
 		} finally {
 			session.close();
 		}

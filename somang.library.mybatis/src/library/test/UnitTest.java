@@ -11,7 +11,7 @@ public class UnitTest {
 		System.out.println(u.today());
 		System.out.println(u.periodDate());
 		
-		System.out.println(u.lending());
+//		System.out.println(u.lending());
 		
 //		SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 //		String todayString = dateformat.format(new Date());
